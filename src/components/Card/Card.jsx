@@ -2,17 +2,36 @@ import { useState } from 'react'
 
 import styles from './Card.module.scss'
 
-function Card({ title, imageUrl, price, onFavorite, onPlus }) {
-  const [isAdded, setIsAdded] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
+function Card({
+  id,
+  title,
+  imageUrl,
+  price,
+  onFavorite,
+  cartItems,
+  toggleAddRemoveToCart,
+  favorite = false,
+}) {
+  const checkCartItemsId = () => {
+    if (cartItems.find((item) => item.productId === id)) {
+      return cartItems.find((item) => item.productId === id).id
+    }
+    return null
+  }
+
+  const cartItemsId = checkCartItemsId()
+
+  const [isAdded, setIsAdded] = useState(cartItemsId ? true : false)
+
+  const [isFavorite, setIsFavorite] = useState(favorite)
 
   const onClickPlus = () => {
-    onPlus({ title, imageUrl, price })
+    toggleAddRemoveToCart({ id, cartItemsId, title, imageUrl, price })
     setIsAdded(!isAdded)
   }
 
   const onClickFavorite = () => {
-    onFavorite({ title, imageUrl, price })
+    onFavorite({ productId: id, title, imageUrl, price })
     setIsFavorite(!isFavorite)
   }
 
@@ -21,7 +40,7 @@ function Card({ title, imageUrl, price, onFavorite, onPlus }) {
       <div onClick={onClickFavorite} className={styles.favorite}>
         <img
           src={isFavorite ? '/img/like.svg' : '/img/unlike.svg'}
-          alt="Unlike"
+          alt="Like"
         />
       </div>
       <img width={133} height={112} src={imageUrl} alt="Model 1" />

@@ -1,4 +1,4 @@
-function Drawer({ items, onClose, onRemove }) {
+function Drawer({ items, sum, onClose, onRemoveItem }) {
   const onClickOverlay = (e) => {
     if (e.target.className === 'overlay') {
       onClose()
@@ -39,7 +39,7 @@ function Drawer({ items, onClose, onRemove }) {
                       src="/img/btn-remove.svg"
                       alt="Remove"
                       className="removeBtn"
-                      onClick={() => onRemove(item.id)}
+                      onClick={() => onRemoveItem(item.id)}
                     />
                   </div>
                 ))}
@@ -49,12 +49,12 @@ function Drawer({ items, onClose, onRemove }) {
                 <li>
                   <span>Итого:</span>
                   <div></div>
-                  <b>21 498 руб.</b>
+                  <b>{sum} руб.</b>
                 </li>
                 <li>
                   <span>Налог 5%:</span>
                   <div></div>
-                  <b>1074 руб.</b>
+                  <b>{(sum * 0.05).toFixed()} руб.</b>
                 </li>
               </ul>
 
