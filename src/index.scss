@@ -20,12 +20,22 @@ body {
 }
 
 header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #fff;
   border-bottom: 1px solid #eaeaea;
   overflow: hidden;
   flex-wrap: wrap;
 
   img {
     margin-right: 15px;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+    height: 46px;
   }
 
   h3,
