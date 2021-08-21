@@ -1,17 +1,34 @@
+import { useContext } from 'react'
+
 import Card from '../components/Card'
+import { AppContext } from '../App'
 
 function Home({
-  items,
   searchValue,
   onChangeSearchInput,
   setSearchValue,
-  onAddToCart,
-  onRemoveItem,
   toggleAddRemoveToCart,
-  cartItems,
   onAddToFavorite,
-  favorites,
+  loading,
 }) {
+  const { items } = useContext(AppContext)
+
+  const renderItems = () => {
+    const filterItems = items.filter((item) =>
+      item.title.toLowerCase().includes(searchValue.toLowerCase())
+    )
+
+    return (loading ? [...Array(8)] : filterItems).map((item, index) => (
+      <Card
+        key={index}
+        loading={loading}
+        {...item}
+        onFavorite={onAddToFavorite}
+        toggleAddRemoveToCart={toggleAddRemoveToCart}
+      />
+    ))
+  }
+
   return (
     <div className="content p-20">
       <div className="d-flex justify-between mb-40 align-center  flex-wrap">
@@ -39,30 +56,7 @@ function Home({
         </div>
       </div>
 
-      <div className="content-items d-flex flex-wrap">
-        {items &&
-          items
-            .filter((item) =>
-              item.title.toLowerCase().includes(searchValue.toLowerCase())
-            )
-            .map((item, index) => (
-              <Card
-                key={index}
-                id={item.id}
-                title={item.title}
-                price={item.price}
-                imageUrl={item.imageUrl}
-                onFavorite={onAddToFavorite}
-                toggleAddRemoveToCart={toggleAddRemoveToCart}
-                cartItems={cartItems}
-                favorite={
-                  favorites.find((obj) => obj.productId === item.id) &&
-                  favorites.find((obj) => obj.productId === item.id)
-                    .productId === item.id
-                }
-              />
-            ))}
-      </div>
+      <div className="content-items d-flex flex-wrap">{renderItems()}</div>
     </div>
   )
 }

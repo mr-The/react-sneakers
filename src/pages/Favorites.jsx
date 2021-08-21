@@ -1,13 +1,11 @@
-import Card from '../components/Card'
+import { useContext } from 'react'
 
-function Favorites({
-  items,
-  onAddToFavorite,
-  onAddToCart,
-  onRemoveItem,
-  toggleAddRemoveToCart,
-  cartItems,
-}) {
+import Card from '../components/Card'
+import { AppContext } from '../App'
+
+function Favorites({ onAddToFavorite, toggleAddRemoveToCart, loading }) {
+  const { favorites } = useContext(AppContext)
+
   return (
     <div className="content p-20">
       <div className="d-flex justify-between mb-40 align-center  flex-wrap">
@@ -15,22 +13,15 @@ function Favorites({
       </div>
 
       <div className="content-items d-flex flex-wrap">
-        {items &&
-          items.map((item, index) => (
-            <Card
-              key={index}
-              id={item.productId}
-              title={item.title}
-              price={item.price}
-              imageUrl={item.imageUrl}
-              favorite={true}
-              onFavorite={onAddToFavorite}
-              toggleAddRemoveToCart={toggleAddRemoveToCart}
-              cartItems={cartItems}
-              onAddToCart={onAddToCart}
-              onRemoveItem={onRemoveItem}
-            />
-          ))}
+        {(loading ? [...Array(4)] : favorites).map((item, index) => (
+          <Card
+            key={index}
+            {...item}
+            onFavorite={onAddToFavorite}
+            toggleAddRemoveToCart={toggleAddRemoveToCart}
+            loading={loading}
+          />
+        ))}
       </div>
     </div>
   )
