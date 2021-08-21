@@ -1,63 +1,143 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import ContentLoader from 'react-content-loader'
 
+import { AppContext } from '../../App'
 import styles from './Card.module.scss'
 
 function Card({
-  id,
+  productId,
   title,
   imageUrl,
   price,
   onFavorite,
-  cartItems,
   toggleAddRemoveToCart,
-  favorite = false,
+  loading = false,
 }) {
-  const checkCartItemsId = () => {
-    if (cartItems.find((item) => item.productId === id)) {
-      return cartItems.find((item) => item.productId === id).id
+  const { checkCartItemsId, isFavoriteItem } = useContext(AppContext)
+
+  const cartItemsId = checkCartItemsId && checkCartItemsId(productId)
+  const favorite = isFavoriteItem(productId)
+
+  const [modal, setModal] = useState(false)
+
+  const onClickPlus = (e) => {
+    e.stopPropagation()
+    toggleAddRemoveToCart({
+      productId,
+      cartItemsId,
+      title,
+      imageUrl,
+      price,
+    })
+  }
+
+  const onClickFavorite = (e) => {
+    e.stopPropagation()
+    onFavorite({ productId, title, imageUrl, price })
+  }
+
+  const closeModal = (e) => {
+    if (e.target.className === 'overlay' || e.target.innerText === '×') {
+      setModal(!modal)
     }
-    return null
   }
 
-  const cartItemsId = checkCartItemsId()
-
-  const [isAdded, setIsAdded] = useState(cartItemsId ? true : false)
-
-  const [isFavorite, setIsFavorite] = useState(favorite)
-
-  const onClickPlus = () => {
-    toggleAddRemoveToCart({ id, cartItemsId, title, imageUrl, price })
-    setIsAdded(!isAdded)
-  }
-
-  const onClickFavorite = () => {
-    onFavorite({ productId: id, title, imageUrl, price })
-    setIsFavorite(!isFavorite)
-  }
+  const Loader = (props) => (
+    <ContentLoader
+      speed={2}
+      width={230}
+      height={265}
+      viewBox="0 0 230 265"
+      backgroundColor="#f3f3f3"
+      foregroundColor="#ecebeb"
+      {...props}
+    >
+      <rect x="0" y="0" rx="10" ry="10" width="155" height="155" />
+      <rect x="0" y="167" rx="4" ry="4" width="155" height="15" />
+      <rect x="0" y="187" rx="4" ry="4" width="100" height="15" />
+      <rect x="0" y="234" rx="4" ry="4" width="80" height="32" />
+      <rect x="123" y="234" rx="10" ry="10" width="32" height="32" />
+    </ContentLoader>
+  )
 
   return (
-    <div className={styles.card}>
-      <div onClick={onClickFavorite} className={styles.favorite}>
-        <img
-          src={isFavorite ? '/img/like.svg' : '/img/unlike.svg'}
-          alt="Like"
-        />
-      </div>
-      <img width={133} height={112} src={imageUrl} alt="Model 1" />
-      <h5>{title}</h5>
-      <div className="d-flex justify-between align-center">
-        <div className="d-flex flex-column">
-          <span>Цена:</span>
-          <b>{price} руб.</b>
+    <>
+      {modal && (
+        <div className="overlay" onClick={closeModal}>
+          <div className={styles.modal}>
+            <div>
+              <div onClick={onClickFavorite} className={styles.favorite}>
+                <img
+                  src={favorite ? '/img/like.svg' : '/img/unlike.svg'}
+                  alt="Like"
+                />
+              </div>
+              <img width="266px" height="224px" src={imageUrl} alt={title} />
+            </div>
+
+            <div className={styles.description}>
+              <span className={styles.close}>&times;</span>
+              <h3>{title}</h3>
+              <p>
+                Описание: <br /> {title}
+              </p>
+              <div
+                className="d-flex justify-between align-center"
+                style={{ flex: 1 }}
+              >
+                <div className="d-flex flex-column">
+                  <span>
+                    Цена: <b>{price} руб.</b>
+                  </span>
+                </div>
+                <img
+                  className={styles.plus}
+                  onClick={onClickPlus}
+                  src={
+                    cartItemsId ? '/img/btn-checked.svg' : '/img/btn-plus.svg'
+                  }
+                  alt="Plus"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <img
-          className={styles.plus}
-          onClick={onClickPlus}
-          src={isAdded ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
-          alt="Plus"
-        />
+      )}
+
+      <div
+        onClick={() => {
+          setModal(true)
+        }}
+        className={styles.card}
+      >
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div onClick={onClickFavorite} className={styles.favorite}>
+              <img
+                src={favorite ? '/img/like.svg' : '/img/unlike.svg'}
+                alt="Like"
+              />
+            </div>
+            <img width="100%" height="100%" src={imageUrl} alt={title} />
+            <h5>{title}</h5>
+            <div className="d-flex justify-between align-center">
+              <div className="d-flex flex-column">
+                <span>Цена:</span>
+                <b>{price} руб.</b>
+              </div>
+              <img
+                className={styles.plus}
+                onClick={onClickPlus}
+                src={cartItemsId ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
+                alt="Plus"
+              />
+            </div>
+          </>
+        )}
       </div>
-    </div>
+    </>
   )
 }
 

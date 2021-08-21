@@ -23,6 +23,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 1;
+  border-radius: 20px 20px 0 0;
   background-color: #fff;
   border-bottom: 1px solid #eaeaea;
   overflow: hidden;
@@ -50,9 +51,42 @@ header {
     margin: 0;
   }
 
+  > div {
+    > p {
+      > span {
+        cursor: pointer;
+        text-decoration: underline;
+        color: #555;
+      }
+    }
+  }
+
   .content-items {
     gap: 10px;
-    justify-content: space-evenly;
+    justify-content: space-between;
+
+    h3 {
+      width: 100%;
+    }
+
+    .order-block {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+
+      .order-title {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        > p {
+          width: 100%;
+          text-align: right;
+        }
+      }
+    }
   }
 }
 
@@ -170,6 +204,11 @@ header {
 
   .greenButton {
     position: relative;
+
+    &:disabled {
+      background-color: #bebebe;
+      cursor: default;
+    }
 
     &:hover {
       img {

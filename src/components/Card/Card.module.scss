@@ -14,6 +14,8 @@
   }
 
   .favorite {
+    width: 36px;
+    height: 36px;
     position: absolute;
     cursor: pointer;
   }
@@ -36,5 +38,50 @@
 
   .plus {
     cursor: pointer;
+  }
+}
+
+.modal {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+
+  .favorite {
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    cursor: pointer;
+  }
+
+  .close {
+    cursor: pointer;
+    position: absolute;
+    top: -4px;
+    right: 8px;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .description {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  span {
+    font-size: 15px;
+    color: #aaa;
+    text-transform: uppercase;
+
+    b {
+      font-size: 16px;
+      color: #222;
+      text-transform: none;
+    }
   }
 }
