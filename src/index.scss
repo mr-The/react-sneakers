@@ -110,6 +110,15 @@ header {
     margin-right: 18px;
     font-size: 16px;
     width: 200px;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &:focus {
+      opacity: 1;
+    }
   }
 }
 
@@ -121,6 +130,7 @@ header {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 10;
+  animation: overlay-animation 0.6s ease-in;
 }
 
 .drawer {
@@ -133,6 +143,7 @@ header {
   padding: 30px;
   background: #fff;
   box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
+  animation: drawer-animation 0.5s ease-in-out;
 
   .order-cart {
     overflow: auto;
@@ -277,5 +288,25 @@ header {
     &:hover {
       opacity: 1;
     }
+  }
+}
+
+@keyframes drawer-animation {
+  from {
+    right: -420px;
+  }
+
+  to {
+    right: 0;
+  }
+}
+
+@keyframes overlay-animation {
+  from {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  to {
+    background: rgba(0, 0, 0, 0.5);
   }
 }
