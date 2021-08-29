@@ -64,6 +64,7 @@ function Orders({ onAddToFavorite, toggleAddRemoveToCart }) {
           </span>
         </p>
       </div>
+      <hr />
 
       <div className="content-items d-flex flex-wrap">
         {loading
